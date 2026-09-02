@@ -57,6 +57,11 @@
   <!-- 카드 -->
   <div style="background:#121A33; border-radius:22px; padding:26px 22px 24px; margin-top:16px; box-shadow:0 0 0 1px rgba(79,195,247,0.25), 0 0 30px rgba(79,195,247,0.12), 0 12px 24px rgba(0,0,0,0.45); border:1px solid #24345A;">
 
+    <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:18px;">
+      <span style="font-size:18px; font-weight:800; color:#7EE7FF;">📋 매입원가 판매가 계산기</span>
+      <button type="button" id="resetBtn1" style="flex-shrink:0; background:transparent; border:1.5px solid #24345A; color:#93A0C0; font-size:13px; font-weight:700; border-radius:12px; padding:6px 12px; cursor:pointer; white-space:nowrap;">↺ 초기화</button>
+    </div>
+
     <!-- 비과세 체크 -->
     <label for="taxExempt" style="display:flex; align-items:center; gap:10px; background:#0E1530; border:1.5px solid #24345A; border-radius:14px; padding:12px 16px; margin-bottom:20px; cursor:pointer;">
       <input type="checkbox" id="taxExempt" style="display:none;">
@@ -110,12 +115,12 @@
     </div>
 
     <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; background:#0E1530; border:1.5px solid #24345A; border-radius:14px; padding:14px 16px; margin-bottom:10px;">
-      <div style="font-size:16px; line-height:1.4; font-weight:700;">🛰️ 스마트스토어 판매가<br><small style="font-size:12px; color:#93A0C0; font-weight:400;">마진율 +2%p 확보</small></div>
+      <div style="font-size:16px; line-height:1.4; font-weight:700;">🛰️ 스마트스토어 판매가<br><small style="font-size:12px; color:#93A0C0; font-weight:400;">수수료 6.63% 반영, 판매차익 동일화</small></div>
       <div id="out-b2" style="font-size:20px; font-weight:800; color:#E6EDF7; text-align:right; white-space:nowrap; font-family:'Consolas','Courier New',monospace;">-</div>
     </div>
 
     <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; background:#0E1530; border:1.5px solid #24345A; border-radius:14px; padding:14px 16px; margin-bottom:0;">
-      <div style="font-size:16px; line-height:1.4; font-weight:700;">🛸 식봄 판매가<br><small style="font-size:12px; color:#93A0C0; font-weight:400;">마진율 +5%p 확보</small></div>
+      <div style="font-size:16px; line-height:1.4; font-weight:700;">🛸 식봄 판매가<br><small style="font-size:12px; color:#93A0C0; font-weight:400;">수수료 8% 반영, 판매차익 동일화</small></div>
       <div id="out-b3" style="font-size:20px; font-weight:800; color:#E6EDF7; text-align:right; white-space:nowrap; font-family:'Consolas','Courier New',monospace;">-</div>
     </div>
   </div>
@@ -123,8 +128,9 @@
   <!-- 두번째 카드: 판매채널 가격 계산기 -->
   <div style="background:#121A33; border-radius:22px; padding:26px 22px 24px; margin-top:20px; box-shadow:0 0 0 1px rgba(79,195,247,0.25), 0 0 30px rgba(79,195,247,0.12), 0 12px 24px rgba(0,0,0,0.45); border:1px solid #24345A;">
 
-    <div style="margin-bottom:6px;">
+    <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:6px;">
       <span style="font-size:18px; font-weight:800; color:#7EE7FF;">🛒 판매채널 가격 계산기</span>
+      <button type="button" id="resetBtn2" style="flex-shrink:0; background:transparent; border:1.5px solid #24345A; color:#93A0C0; font-size:13px; font-weight:700; border-radius:12px; padding:6px 12px; cursor:pointer; white-space:nowrap;">↺ 초기화</button>
     </div>
     <p style="margin:0 0 18px; font-size:14px; color:#93A0C0;">대표 판매가만 있으면 채널별 판매가를 바로 계산해요</p>
 
@@ -147,22 +153,63 @@
     </div>
 
     <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; background:#0E1530; border:1.5px solid #24345A; border-radius:14px; padding:14px 16px; margin-bottom:10px;">
-      <div style="font-size:16px; line-height:1.4; font-weight:700;">🛰️ 스마트스토어 판매가<br><small style="font-size:12px; color:#93A0C0; font-weight:400;">대표 판매가 대비 +2%p</small></div>
+      <div style="font-size:16px; line-height:1.4; font-weight:700;">🛰️ 스마트스토어 판매가<br><small style="font-size:12px; color:#93A0C0; font-weight:400;">수수료 6.63% 반영, 판매차익 동일화</small></div>
       <div id="out-b2-channel" style="font-size:20px; font-weight:800; color:#E6EDF7; text-align:right; white-space:nowrap; font-family:'Consolas','Courier New',monospace;">-</div>
     </div>
 
     <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; background:#0E1530; border:1.5px solid #24345A; border-radius:14px; padding:14px 16px; margin-bottom:0;">
-      <div style="font-size:16px; line-height:1.4; font-weight:700;">🛸 식봄 판매가<br><small style="font-size:12px; color:#93A0C0; font-weight:400;">대표 판매가 대비 +5%p</small></div>
+      <div style="font-size:16px; line-height:1.4; font-weight:700;">🛸 식봄 판매가<br><small style="font-size:12px; color:#93A0C0; font-weight:400;">수수료 8% 반영, 판매차익 동일화</small></div>
       <div id="out-b3-channel" style="font-size:20px; font-weight:800; color:#E6EDF7; text-align:right; white-space:nowrap; font-family:'Consolas','Courier New',monospace;">-</div>
     </div>
+  </div>
+
+  <div style="text-align:center; margin-top:20px;">
+    <button type="button" id="resetAllBtn" style="background:#12324F; border:1.5px solid #4FC3F7; color:#7EE7FF; font-size:15px; font-weight:700; border-radius:14px; padding:12px 28px; cursor:pointer;">🔄 전체 초기화</button>
   </div>
 
   <div style="margin-top:18px; font-size:14px; color:#93A0C0; line-height:1.7; text-align:center;">
     판매가 기준 마진율 = (판매가 − 매입원가) ÷ 판매가<br>
     매입원가 기준 마진율 = (판매가 − 매입원가) ÷ 매입원가<br>
-    판매채널 가격 계산기의 스마트스토어·식봄 판매가는 입력한 대표 판매가를 기준으로 +2%p, +5%p 마진을 추가 확보하는 가격이에요.
+    자사몰 수수료 3.63%, 스마트스토어 수수료 6.63%, 식봄 수수료 8%를 기준으로, 채널별 수수료를 떼고 나서도 매입원가 대비 판매차익이 항상 동일하게 남도록 계산해요. 대표 판매가만 있으면 계산되고, 두 계산기 결과는 항상 같아요.
+  </div>
+
+  <!-- 채널·결제수단별 수수료 참고표 -->
+  <div style="background:#121A33; border-radius:22px; padding:26px 22px 24px; margin-top:24px; box-shadow:0 0 0 1px rgba(79,195,247,0.25), 0 0 30px rgba(79,195,247,0.12), 0 12px 24px rgba(0,0,0,0.45); border:1px solid #24345A;">
+    <div style="margin-bottom:18px;">
+      <span style="font-size:18px; font-weight:800; color:#7EE7FF;">📑 채널별 수수료 참고</span>
+    </div>
+
+    <table style="width:100%; border-collapse:collapse; font-size:15px;">
+      <tr>
+        <td style="padding:10px 8px; border-bottom:1px solid #24345A; color:#93A0C0; width:38%;">자사몰 · 네이버페이</td>
+        <td style="padding:10px 8px; border-bottom:1px solid #24345A; color:#E6EDF7; text-align:right; font-family:'Consolas','Courier New',monospace; font-weight:700;">3.63%</td>
+      </tr>
+      <tr>
+        <td style="padding:10px 8px; border-bottom:1px solid #24345A; color:#93A0C0;">자사몰 · 토스페이먼츠(카드)</td>
+        <td style="padding:10px 8px; border-bottom:1px solid #24345A; color:#E6EDF7; text-align:right; font-family:'Consolas','Courier New',monospace; font-weight:700;">2.42%</td>
+      </tr>
+      <tr>
+        <td style="padding:10px 8px; border-bottom:1px solid #24345A; color:#93A0C0;">자사몰 · 토스페이먼츠(실시간계좌이체 에스크로)</td>
+        <td style="padding:10px 8px; border-bottom:1px solid #24345A; color:#E6EDF7; text-align:right; font-family:'Consolas','Courier New',monospace; font-weight:700;">1.65%</td>
+      </tr>
+      <tr>
+        <td style="padding:10px 8px; border-bottom:1px solid #24345A; color:#93A0C0;">자사몰 · 무통장입금</td>
+        <td style="padding:10px 8px; border-bottom:1px solid #24345A; color:#E6EDF7; text-align:right; font-family:'Consolas','Courier New',monospace; font-weight:700;">0원</td>
+      </tr>
+      <tr>
+        <td style="padding:10px 8px; border-bottom:1px solid #24345A; color:#93A0C0;">스마트스토어 수수료</td>
+        <td style="padding:10px 8px; border-bottom:1px solid #24345A; color:#E6EDF7; text-align:right; font-family:'Consolas','Courier New',monospace; font-weight:700;">6.63%</td>
+      </tr>
+      <tr>
+        <td style="padding:10px 8px; color:#93A0C0;">식봄 판매수수료</td>
+        <td style="padding:10px 8px; color:#E6EDF7; text-align:right; font-family:'Consolas','Courier New',monospace; font-weight:700;">8%</td>
+      </tr>
+    </table>
+
+    <p style="margin:14px 0 0; font-size:13px; color:#93A0C0; line-height:1.6;">※ 식봄 판매수수료는 2026년 10월부터 6%에서 8%로 인상돼요.</p>
   </div>
 </div>
+
 
 <script>
   var costExInput = document.getElementById('costEx');
@@ -182,8 +229,21 @@
   var outB2Channel = document.getElementById('out-b2-channel');
   var outB3Channel = document.getElementById('out-b3-channel');
   var lastB1Value = null;
+  var lastB2Value = null;
+  var lastB3Value = null;
 
   var VAT_RATE = 0.1;
+
+  // 채널별 수수료율 (판매가 기준). 자사몰 수수료를 기준으로 다른 채널 판매가를 역산해서
+  // 어느 채널에서 팔든 수수료를 떼고 남는 실수령액(=판매차익)이 항상 동일하게 맞춤
+  var OWN_MALL_FEE = 0.0363;   // 자사몰(대표 판매가) 수수료 3.63%
+  var SMART_STORE_FEE = 0.0663; // 스마트스토어 수수료 6.63%
+  var SIKBOM_FEE = 0.08;        // 식봄 수수료 8%
+
+  // 대표 판매가 -> 채널별 판매가: 대표 판매가 × (1-자사몰수수료) ÷ (1-채널수수료)
+  function toChannelPrice(basePrice, channelFee) {
+    return basePrice * (1 - OWN_MALL_FEE) / (1 - channelFee);
+  }
 
   function parseNumber(str) {
     var n = parseFloat(String(str).replace(/,/g, ''));
@@ -244,12 +304,17 @@
       outC.textContent = '-';
       outB2.textContent = '-';
       outB3.textContent = '-';
+      lastB1Value = null;
+      lastB2Value = null;
+      lastB3Value = null;
       return;
     }
 
     var b1 = priceFromMargin(cost, marginA);
-    var b2 = priceFromMargin(cost, marginA + 2);
-    var b3 = priceFromMargin(cost, marginA + 5);
+    // 스마트스토어·식봄 판매가는 채널별 수수료율 차이를 보정해서, 어느 채널에서 팔든
+    // 매입원가 대비 동일한 판매차익이 남도록 계산
+    var b2 = (b1 !== null) ? toChannelPrice(b1, SMART_STORE_FEE) : null;
+    var b3 = (b1 !== null) ? toChannelPrice(b1, SIKBOM_FEE) : null;
 
     outB1.textContent = formatWonCeil(b1);
 
@@ -268,6 +333,9 @@
 
     outB2.textContent = formatWonCeil(b2);
     outB3.textContent = formatWonCeil(b3);
+
+    lastB2Value = (b2 !== null) ? Math.ceil(b2 / 10) * 10 : null;
+    lastB3Value = (b3 !== null) ? Math.ceil(b3 / 10) * 10 : null;
   }
 
   function applyTaxExemptState() {
@@ -288,16 +356,21 @@
     calculate();
   }
 
-  // 판매채널 가격 계산기: 대표 판매가 기준 +2%p, +5%p 마진 확보 가격
+  // 판매채널 가격 계산기: 채널별 수수료율 차이를 보정해서 어느 채널에서 팔든
+  // 동일한 판매차익이 남도록 계산. 대표 판매가만 있으면 계산되고,
+  // 첫번째 계산기와 동일한 공식이라 항상 같은 값이 나옴
   function computeChannelPrices() {
     var p = parseNumber(basePriceInput.value);
+
     if (p === null || p <= 0) {
       outB2Channel.textContent = '-';
       outB3Channel.textContent = '-';
       return;
     }
-    var smart = p / (1 - 0.02);
-    var sikbom = p / (1 - 0.05);
+
+    var smart = toChannelPrice(p, SMART_STORE_FEE);
+    var sikbom = toChannelPrice(p, SIKBOM_FEE);
+
     outB2Channel.textContent = formatWonCeil(smart);
     outB3Channel.textContent = formatWonCeil(sikbom);
   }
@@ -315,6 +388,32 @@
   costIncInput.addEventListener('input', function () { syncFromInc(); calculate(); });
   marginAInput.addEventListener('input', calculate);
   taxExemptCheckbox.addEventListener('change', applyTaxExemptState);
+
+  // 첫번째 계산기 초기화
+  var resetBtn1 = document.getElementById('resetBtn1');
+  function resetCalculator1() {
+    costExInput.value = '';
+    costIncInput.value = '';
+    marginAInput.value = '';
+    taxExemptCheckbox.checked = false;
+    applyTaxExemptState();
+  }
+  resetBtn1.addEventListener('click', resetCalculator1);
+
+  // 두번째 계산기 초기화
+  var resetBtn2 = document.getElementById('resetBtn2');
+  function resetCalculator2() {
+    basePriceInput.value = '';
+    computeChannelPrices();
+  }
+  resetBtn2.addEventListener('click', resetCalculator2);
+
+  // 전체 초기화
+  var resetAllBtn = document.getElementById('resetAllBtn');
+  resetAllBtn.addEventListener('click', function () {
+    resetCalculator1();
+    resetCalculator2();
+  });
 
   applyTaxExemptState();
   computeChannelPrices();
