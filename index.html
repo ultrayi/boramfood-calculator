@@ -322,10 +322,6 @@
     }
 
     var b1 = priceFromMargin(cost, marginA);
-    // 스마트스토어·식봄 판매가는 채널별 수수료율 차이를 보정해서, 어느 채널에서 팔든
-    // 매입원가 대비 동일한 판매차익이 남도록 계산
-    var b2 = (b1 !== null) ? toChannelPrice(b1, SMART_STORE_FEE) : null;
-    var b3 = (b1 !== null) ? toChannelPrice(b1, SIKBOM_FEE) : null;
 
     outB1.textContent = formatWonCeil(b1);
 
@@ -337,6 +333,11 @@
       lastB1Value = null;
       outB1ActualMargin.textContent = '-';
     }
+
+    // 스마트스토어·식봄 판매가는 "화면에 표시되는(십원단위 올림된) 대표 판매가"를 기준으로 계산해서
+    // 두번째 계산기(같은 대표 판매가 입력 시)와 항상 동일한 값이 나오도록 함
+    var b2 = (lastB1Value !== null) ? toChannelPrice(lastB1Value, SMART_STORE_FEE) : null;
+    var b3 = (lastB1Value !== null) ? toChannelPrice(lastB1Value, SIKBOM_FEE) : null;
 
     if (b1 !== null) {
       var c = ((b1 - cost) / cost) * 100;
