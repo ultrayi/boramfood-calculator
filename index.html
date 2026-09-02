@@ -105,7 +105,7 @@
     </div>
 
     <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; background:linear-gradient(135deg,#12324F,#0E1530); border:1.5px solid #4FC3F7; border-radius:14px; padding:14px 16px; margin-bottom:10px;">
-      <div style="font-size:16px; line-height:1.4; font-weight:700;">🚀 대표 판매가<br><small style="font-size:12px; color:#93A0C0; font-weight:400;">목표 마진율 적용 시</small></div>
+      <div style="font-size:16px; line-height:1.4; font-weight:700;">🚀 대표 판매가<br><small style="font-size:12px; color:#93A0C0; font-weight:400;">목표 마진율 적용 시</small><br><small id="out-b1-actual-margin" style="font-size:13.2px; color:#93A0C0; font-weight:400;">-</small></div>
       <div id="out-b1" style="font-size:24px; font-weight:800; color:#7EE7FF; text-align:right; white-space:nowrap; font-family:'Consolas','Courier New',monospace; text-shadow:0 0 10px rgba(126,231,255,0.5);">-</div>
     </div>
 
@@ -220,6 +220,7 @@
   var costIncLabel = document.getElementById('costIncLabel');
 
   var outB1 = document.getElementById('out-b1');
+  var outB1ActualMargin = document.getElementById('out-b1-actual-margin');
   var outC = document.getElementById('out-c');
   var outB2 = document.getElementById('out-b2');
   var outB3 = document.getElementById('out-b3');
@@ -268,7 +269,11 @@
     return truncated.toFixed(1) + '%';
   }
 
-  function priceFromMargin(cost, marginPct) {
+  // 실제 판매가 기준 마진율: 소수점 둘째자리에서 반올림해 첫째자리까지 표기
+  function formatPercentRound(n) {
+    if (n === null || !isFinite(n)) return '-';
+    return n.toFixed(1) + '%';
+  }
     var m = marginPct / 100;
     if (m >= 1) return null;
     return cost / (1 - m);
@@ -301,6 +306,7 @@
 
     if (cost === null || cost <= 0 || marginA === null) {
       outB1.textContent = '-';
+      outB1ActualMargin.textContent = '-';
       outC.textContent = '-';
       outB2.textContent = '-';
       outB3.textContent = '-';
@@ -320,8 +326,11 @@
 
     if (b1 !== null) {
       lastB1Value = Math.ceil(b1 / 10) * 10;
+      var actualMargin = ((lastB1Value - cost) / lastB1Value) * 100;
+      outB1ActualMargin.textContent = '실제 마진율 ' + formatPercentRound(actualMargin);
     } else {
       lastB1Value = null;
+      outB1ActualMargin.textContent = '-';
     }
 
     if (b1 !== null) {
