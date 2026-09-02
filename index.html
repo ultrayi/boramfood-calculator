@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>보람푸드 계산기</title>
+</head>
+<body style="margin:0; min-height:100vh; background:radial-gradient(circle at 20% 10%, #1B2A4A 0%, #0A0E27 45%, #05070F 100%); font-family:'Apple SD Gothic Neo','Malgun Gothic',sans-serif; color:#E6EDF7; display:flex; justify-content:center; padding:36px 16px 60px; position:relative;">
+
+<!-- 별 배경 -->
+<div style="position:absolute; inset:0; background-image:radial-gradient(1.5px 1.5px at 10% 20%, #ffffff 100%, transparent), radial-gradient(1.5px 1.5px at 80% 15%, #ffffff 100%, transparent), radial-gradient(1px 1px at 30% 70%, #ffffff 100%, transparent), radial-gradient(1px 1px at 60% 85%, #ffffff 100%, transparent), radial-gradient(1.5px 1.5px at 90% 60%, #ffffff 100%, transparent), radial-gradient(1px 1px at 45% 35%, #ffffff 100%, transparent), radial-gradient(1.5px 1.5px at 15% 90%, #ffffff 100%, transparent); background-repeat:no-repeat; opacity:0.6; pointer-events:none;"></div>
+
+<div style="width:100%; max-width:480px; position:relative; z-index:1;">
+
+  <!-- 마스코트 & 타이틀 -->
+  <div style="text-align:center; margin-bottom:16px;">
+    <div style="display:flex; justify-content:center; align-items:flex-end; gap:18px; margin-bottom:10px;">
+
+      <!-- 탐사 로봇 (돔형 소형 로봇) -->
+      <svg viewBox="0 0 120 130" width="86" height="93" xmlns="http://www.w3.org/2000/svg">
+        <ellipse cx="60" cy="118" rx="30" ry="6" fill="#000000" opacity="0.25"/>
+        <rect x="24" y="46" width="72" height="66" rx="16" fill="#DCE4EE" stroke="#8FA3C0" stroke-width="3"/>
+        <rect x="24" y="46" width="72" height="66" rx="16" fill="none" stroke="#3FA6E0" stroke-width="2" stroke-dasharray="4 5" opacity="0.5"/>
+        <circle cx="46" cy="76" r="7" fill="#3FA6E0"/>
+        <circle cx="74" cy="76" r="7" fill="#E85C4A"/>
+        <rect x="40" y="92" width="40" height="8" rx="4" fill="#8FA3C0"/>
+        <path d="M24 60 Q10 66 14 84" stroke="#8FA3C0" stroke-width="8" fill="none" stroke-linecap="round"/>
+        <path d="M96 60 Q110 66 106 84" stroke="#8FA3C0" stroke-width="8" fill="none" stroke-linecap="round"/>
+        <circle cx="60" cy="34" r="30" fill="#F1F5FA" stroke="#8FA3C0" stroke-width="3"/>
+        <circle cx="60" cy="30" r="10" fill="#3FA6E0"/>
+        <circle cx="63" cy="27" r="3" fill="#ffffff" opacity="0.8"/>
+        <rect x="30" y="10" width="8" height="8" rx="2" fill="#E85C4A"/>
+        <rect x="82" y="10" width="8" height="8" rx="2" fill="#3FA6E0"/>
+      </svg>
+
+      <!-- 휴머노이드 로봇 친구 -->
+      <svg viewBox="0 0 120 150" width="78" height="98" xmlns="http://www.w3.org/2000/svg">
+        <ellipse cx="60" cy="140" rx="26" ry="6" fill="#000000" opacity="0.25"/>
+        <circle cx="60" cy="34" r="26" fill="#CFD8E3" stroke="#7C8AA0" stroke-width="3"/>
+        <ellipse cx="49" cy="32" rx="6" ry="8" fill="#2B3A55"/>
+        <ellipse cx="71" cy="32" rx="6" ry="8" fill="#2B3A55"/>
+        <rect x="46" y="46" width="28" height="5" rx="2.5" fill="#7C8AA0"/>
+        <rect x="40" y="60" width="40" height="56" rx="14" fill="#DCE4EE" stroke="#7C8AA0" stroke-width="3"/>
+        <rect x="50" y="72" width="20" height="14" rx="4" fill="#F5A623" opacity="0.85"/>
+        <circle cx="60" cy="79" r="3.5" fill="#3FA6E0"/>
+        <rect x="24" y="66" width="14" height="42" rx="7" fill="#CFD8E3" stroke="#7C8AA0" stroke-width="2.5"/>
+        <rect x="82" y="66" width="14" height="42" rx="7" fill="#CFD8E3" stroke="#7C8AA0" stroke-width="2.5"/>
+        <rect x="44" y="116" width="14" height="26" rx="6" fill="#B9C4D4" stroke="#7C8AA0" stroke-width="2.5"/>
+        <rect x="62" y="116" width="14" height="26" rx="6" fill="#B9C4D4" stroke="#7C8AA0" stroke-width="2.5"/>
+      </svg>
+
+    </div>
+    <h1 style="font-size:26px; margin:2px 0 4px; color:#7EE7FF; font-weight:800; letter-spacing:0.5px; text-shadow:0 0 14px rgba(126,231,255,0.45);">보람푸드 계산기</h1>
+    <p style="margin:0; font-size:16px; color:#93A0C0;">숫자를 입력하면 로봇 친구들이 계산해줘요</p>
+  </div>
+
+  <!-- 카드 -->
+  <div style="background:#121A33; border-radius:22px; padding:26px 22px 24px; margin-top:16px; box-shadow:0 0 0 1px rgba(79,195,247,0.25), 0 0 30px rgba(79,195,247,0.12), 0 12px 24px rgba(0,0,0,0.45); border:1px solid #24345A;">
+
+    <!-- 비과세 체크 -->
+    <label for="taxExempt" style="display:flex; align-items:center; gap:10px; background:#0E1530; border:1.5px solid #24345A; border-radius:14px; padding:12px 16px; margin-bottom:20px; cursor:pointer;">
+      <input type="checkbox" id="taxExempt" style="display:none;">
+      <span style="width:15px; height:15px; border-radius:50%; background:#FFFFFF; border:2px solid #FFFFFF; flex-shrink:0; position:relative; display:inline-block;">
+        <span id="taxExemptInnerDot" style="position:absolute; top:50%; left:50%; width:10px; height:10px; border-radius:50%; background:#F5A623; transform:translate(-50%,-50%) scale(0); transition:transform 0.15s ease;"></span>
+      </span>
+      <span style="font-size:16px; font-weight:700; color:#E6EDF7;">🛰️ 비과세 제품 계산시 체크</span>
+    </label>
+
+    <div style="margin-bottom:18px;">
+      <label for="costEx" style="display:flex; align-items:center; gap:6px; font-size:16px; font-weight:700; color:#E6EDF7; margin-bottom:8px;">📦 매입원가 <span style="font-size:13px; color:#93A0C0; font-weight:400;">부가세 별도가</span></label>
+      <div style="display:flex; align-items:center; background:#0E1530; border:1.5px solid #24345A; border-radius:14px; padding:12px 16px;">
+        <input type="text" inputmode="numeric" id="costEx" placeholder="0" value="10000"
+          style="flex:1; border:none; background:transparent; outline:none; font-size:22px; font-weight:700; color:#7EE7FF; min-width:0; font-family:'Consolas','Courier New',monospace;">
+        <span style="font-size:16px; font-weight:700; color:#4FC3F7; margin-left:8px;">원</span>
+      </div>
+    </div>
+
+    <div style="margin-bottom:18px;">
+      <label for="costInc" id="costIncLabel" style="display:flex; align-items:center; gap:6px; font-size:16px; font-weight:700; color:#E6EDF7; margin-bottom:8px;">📦 매입원가 <span style="font-size:13px; color:#93A0C0; font-weight:400;">부가세 포함가 · VAT 10%</span></label>
+      <div style="display:flex; align-items:center; background:#0E1530; border:1.5px solid #24345A; border-radius:14px; padding:12px 16px;">
+        <input type="text" inputmode="numeric" id="costInc" placeholder="0" value="11000"
+          style="flex:1; border:none; background:transparent; outline:none; font-size:22px; font-weight:700; color:#7EE7FF; min-width:0; font-family:'Consolas','Courier New',monospace;">
+        <span style="font-size:16px; font-weight:700; color:#4FC3F7; margin-left:8px;">원</span>
+      </div>
+    </div>
+
+    <div style="margin-bottom:0;">
+      <label for="marginA" style="display:flex; align-items:center; gap:6px; font-size:16px; font-weight:700; color:#E6EDF7; margin-bottom:8px;">🎯 목표 마진율 <span style="font-size:13px; color:#93A0C0; font-weight:400;">판매가 기준</span></label>
+      <div style="display:flex; align-items:center; background:#0E1530; border:1.5px solid #24345A; border-radius:14px; padding:12px 16px;">
+        <input type="text" inputmode="decimal" id="marginA" placeholder="0" value="30"
+          style="flex:1; border:none; background:transparent; outline:none; font-size:22px; font-weight:700; color:#7EE7FF; min-width:0; font-family:'Consolas','Courier New',monospace;">
+        <span style="font-size:16px; font-weight:700; color:#4FC3F7; margin-left:8px;">%</span>
+      </div>
+    </div>
+
+    <div style="display:flex; align-items:center; gap:8px; margin:26px 0 18px; color:#93A0C0; font-size:14px;">
+      <span style="flex:1; height:1px; background:#24345A;"></span>
+      계산 결과
+      <span style="flex:1; height:1px; background:#24345A;"></span>
+    </div>
+
+    <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; background:linear-gradient(135deg,#12324F,#0E1530); border:1.5px solid #4FC3F7; border-radius:14px; padding:14px 16px; margin-bottom:10px;">
+      <div style="font-size:16px; line-height:1.4; font-weight:700;">🚀 대표 판매가<br><small style="font-size:12px; color:#93A0C0; font-weight:400;">목표 마진율 적용 시</small></div>
+      <div id="out-b1" style="font-size:24px; font-weight:800; color:#7EE7FF; text-align:right; white-space:nowrap; font-family:'Consolas','Courier New',monospace; text-shadow:0 0 10px rgba(126,231,255,0.5);">-</div>
+    </div>
+
+    <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; background:#0E1530; border:1.5px solid #24345A; border-radius:14px; padding:14px 16px; margin-bottom:10px;">
+      <div style="font-size:16px; line-height:1.4; font-weight:700;">📊 매입원가 기준 마진율<br><small style="font-size:12px; color:#93A0C0; font-weight:400;">대표 판매가 기준</small></div>
+      <div id="out-c" style="font-size:20px; font-weight:800; color:#F5A623; text-align:right; white-space:nowrap; font-family:'Consolas','Courier New',monospace;">-</div>
+    </div>
+
+    <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; background:#0E1530; border:1.5px solid #24345A; border-radius:14px; padding:14px 16px; margin-bottom:10px;">
+      <div style="font-size:16px; line-height:1.4; font-weight:700;">🛰️ 스마트스토어 판매가<br><small style="font-size:12px; color:#93A0C0; font-weight:400;">마진율 +2%p 확보</small></div>
+      <div id="out-b2" style="font-size:20px; font-weight:800; color:#E6EDF7; text-align:right; white-space:nowrap; font-family:'Consolas','Courier New',monospace;">-</div>
+    </div>
+
+    <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; background:#0E1530; border:1.5px solid #24345A; border-radius:14px; padding:14px 16px; margin-bottom:0;">
+      <div style="font-size:16px; line-height:1.4; font-weight:700;">🛸 식봄 판매가<br><small style="font-size:12px; color:#93A0C0; font-weight:400;">마진율 +5%p 확보</small></div>
+      <div id="out-b3" style="font-size:20px; font-weight:800; color:#E6EDF7; text-align:right; white-space:nowrap; font-family:'Consolas','Courier New',monospace;">-</div>
+    </div>
+  </div>
+
+  <!-- 두번째 카드: 판매채널 가격 계산기 -->
+  <div style="background:#121A33; border-radius:22px; padding:26px 22px 24px; margin-top:20px; box-shadow:0 0 0 1px rgba(79,195,247,0.25), 0 0 30px rgba(79,195,247,0.12), 0 12px 24px rgba(0,0,0,0.45); border:1px solid #24345A;">
+
+    <div style="margin-bottom:6px;">
+      <span style="font-size:18px; font-weight:800; color:#7EE7FF;">🛒 판매채널 가격 계산기</span>
+    </div>
+    <p style="margin:0 0 18px; font-size:14px; color:#93A0C0;">대표 판매가만 있으면 채널별 판매가를 바로 계산해요</p>
+
+    <div style="margin-bottom:0;">
+      <label for="basePriceInput" style="display:flex; align-items:center; gap:6px; font-size:16px; font-weight:700; color:#E6EDF7; margin-bottom:8px;">💰 대표 판매가 <span style="font-size:13px; color:#93A0C0; font-weight:400;">직접 입력 또는 가져오기</span></label>
+      <div style="display:flex; align-items:center; gap:8px;">
+        <div style="flex:1; display:flex; align-items:center; background:#0E1530; border:1.5px solid #24345A; border-radius:14px; padding:12px 16px; min-width:0;">
+          <input type="text" inputmode="numeric" id="basePriceInput" placeholder="0" value=""
+            style="flex:1; border:none; background:transparent; outline:none; font-size:22px; font-weight:700; color:#7EE7FF; min-width:0; font-family:'Consolas','Courier New',monospace;">
+          <span style="font-size:16px; font-weight:700; color:#4FC3F7; margin-left:8px;">원</span>
+        </div>
+        <button type="button" id="importBtn" style="flex-shrink:0; background:#12324F; border:1.5px solid #4FC3F7; color:#7EE7FF; font-size:14px; font-weight:700; border-radius:14px; padding:0 14px; height:48px; cursor:pointer; white-space:nowrap;">⬅ 가져오기</button>
+      </div>
+    </div>
+
+    <div style="display:flex; align-items:center; gap:8px; margin:26px 0 18px; color:#93A0C0; font-size:14px;">
+      <span style="flex:1; height:1px; background:#24345A;"></span>
+      계산 결과
+      <span style="flex:1; height:1px; background:#24345A;"></span>
+    </div>
+
+    <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; background:#0E1530; border:1.5px solid #24345A; border-radius:14px; padding:14px 16px; margin-bottom:10px;">
+      <div style="font-size:16px; line-height:1.4; font-weight:700;">🛰️ 스마트스토어 판매가<br><small style="font-size:12px; color:#93A0C0; font-weight:400;">대표 판매가 대비 +2%p</small></div>
+      <div id="out-b2-channel" style="font-size:20px; font-weight:800; color:#E6EDF7; text-align:right; white-space:nowrap; font-family:'Consolas','Courier New',monospace;">-</div>
+    </div>
+
+    <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; background:#0E1530; border:1.5px solid #24345A; border-radius:14px; padding:14px 16px; margin-bottom:0;">
+      <div style="font-size:16px; line-height:1.4; font-weight:700;">🛸 식봄 판매가<br><small style="font-size:12px; color:#93A0C0; font-weight:400;">대표 판매가 대비 +5%p</small></div>
+      <div id="out-b3-channel" style="font-size:20px; font-weight:800; color:#E6EDF7; text-align:right; white-space:nowrap; font-family:'Consolas','Courier New',monospace;">-</div>
+    </div>
+  </div>
+
+  <div style="margin-top:18px; font-size:14px; color:#93A0C0; line-height:1.7; text-align:center;">
+    판매가 기준 마진율 = (판매가 − 매입원가) ÷ 판매가<br>
+    매입원가 기준 마진율 = (판매가 − 매입원가) ÷ 매입원가<br>
+    판매채널 가격 계산기의 스마트스토어·식봄 판매가는 입력한 대표 판매가를 기준으로 +2%p, +5%p 마진을 추가 확보하는 가격이에요.
+  </div>
+</div>
+
+<script>
+  var costExInput = document.getElementById('costEx');
+  var costIncInput = document.getElementById('costInc');
+  var marginAInput = document.getElementById('marginA');
+  var taxExemptCheckbox = document.getElementById('taxExempt');
+  var taxExemptInnerDot = document.getElementById('taxExemptInnerDot');
+  var costIncLabel = document.getElementById('costIncLabel');
+
+  var outB1 = document.getElementById('out-b1');
+  var outC = document.getElementById('out-c');
+  var outB2 = document.getElementById('out-b2');
+  var outB3 = document.getElementById('out-b3');
+
+  var basePriceInput = document.getElementById('basePriceInput');
+  var importBtn = document.getElementById('importBtn');
+  var outB2Channel = document.getElementById('out-b2-channel');
+  var outB3Channel = document.getElementById('out-b3-channel');
+  var lastB1Value = null;
+
+  var VAT_RATE = 0.1;
+
+  function parseNumber(str) {
+    var n = parseFloat(String(str).replace(/,/g, ''));
+    return isNaN(n) ? null : n;
+  }
+
+  function formatWon(n) {
+    if (n === null || !isFinite(n)) return '-';
+    return Math.round(n).toLocaleString('ko-KR') + '원';
+  }
+
+  // 결과값(판매가)은 십원단위 올림 처리
+  function formatWonCeil(n) {
+    if (n === null || !isFinite(n)) return '-';
+    return (Math.ceil(n / 10) * 10).toLocaleString('ko-KR') + '원';
+  }
+
+  // 매입원가 기준 마진율: 소수점 둘째자리 절삭, 첫째자리까지만 표기
+  function formatPercentTruncate(n) {
+    if (n === null || !isFinite(n)) return '-';
+    var truncated = Math.floor(n * 10) / 10;
+    return truncated.toFixed(1) + '%';
+  }
+
+  function priceFromMargin(cost, marginPct) {
+    var m = marginPct / 100;
+    if (m >= 1) return null;
+    return cost / (1 - m);
+  }
+
+  // 별도가 입력 시 -> 포함가 자동 반영 (비과세면 부가세 미적용)
+  function syncFromEx() {
+    var ex = parseNumber(costExInput.value);
+    if (ex === null) { costIncInput.value = ''; return; }
+    if (taxExemptCheckbox.checked) {
+      costIncInput.value = Math.round(ex);
+    } else {
+      costIncInput.value = Math.round(ex * (1 + VAT_RATE));
+    }
+  }
+
+  // 포함가 입력 시 -> 별도가 자동 반영 (비과세 상태에서는 포함가 입력칸 자체가 비활성화됨)
+  function syncFromInc() {
+    var inc = parseNumber(costIncInput.value);
+    if (inc === null) { costExInput.value = ''; return; }
+    costExInput.value = Math.round(inc / (1 + VAT_RATE));
+  }
+
+  // 계산 시 매입원가 기준값: 과세 제품은 부가세 포함가, 비과세 제품은 부가세 별도가를 사용
+  function calculate() {
+    var cost = taxExemptCheckbox.checked
+      ? parseNumber(costExInput.value)
+      : parseNumber(costIncInput.value);
+    var marginA = parseNumber(marginAInput.value);
+
+    if (cost === null || cost <= 0 || marginA === null) {
+      outB1.textContent = '-';
+      outC.textContent = '-';
+      outB2.textContent = '-';
+      outB3.textContent = '-';
+      return;
+    }
+
+    var b1 = priceFromMargin(cost, marginA);
+    var b2 = priceFromMargin(cost, marginA + 2);
+    var b3 = priceFromMargin(cost, marginA + 5);
+
+    outB1.textContent = formatWonCeil(b1);
+
+    if (b1 !== null) {
+      lastB1Value = Math.ceil(b1 / 10) * 10;
+    } else {
+      lastB1Value = null;
+    }
+
+    if (b1 !== null) {
+      var c = ((b1 - cost) / cost) * 100;
+      outC.textContent = formatPercentTruncate(c);
+    } else {
+      outC.textContent = '-';
+    }
+
+    outB2.textContent = formatWonCeil(b2);
+    outB3.textContent = formatWonCeil(b3);
+  }
+
+  function applyTaxExemptState() {
+    if (taxExemptCheckbox.checked) {
+      taxExemptInnerDot.style.transform = 'translate(-50%,-50%) scale(1)';
+      costIncInput.disabled = true;
+      costIncInput.style.opacity = '0.4';
+      costIncInput.style.cursor = 'not-allowed';
+      costIncLabel.style.opacity = '0.5';
+    } else {
+      taxExemptInnerDot.style.transform = 'translate(-50%,-50%) scale(0)';
+      costIncInput.disabled = false;
+      costIncInput.style.opacity = '1';
+      costIncInput.style.cursor = 'text';
+      costIncLabel.style.opacity = '1';
+    }
+    syncFromEx();
+    calculate();
+  }
+
+  // 판매채널 가격 계산기: 대표 판매가 기준 +2%p, +5%p 마진 확보 가격
+  function computeChannelPrices() {
+    var p = parseNumber(basePriceInput.value);
+    if (p === null || p <= 0) {
+      outB2Channel.textContent = '-';
+      outB3Channel.textContent = '-';
+      return;
+    }
+    var smart = p / (1 - 0.02);
+    var sikbom = p / (1 - 0.05);
+    outB2Channel.textContent = formatWonCeil(smart);
+    outB3Channel.textContent = formatWonCeil(sikbom);
+  }
+
+  basePriceInput.addEventListener('input', computeChannelPrices);
+
+  importBtn.addEventListener('click', function () {
+    if (lastB1Value !== null) {
+      basePriceInput.value = lastB1Value;
+      computeChannelPrices();
+    }
+  });
+
+  costExInput.addEventListener('input', function () { syncFromEx(); calculate(); });
+  costIncInput.addEventListener('input', function () { syncFromInc(); calculate(); });
+  marginAInput.addEventListener('input', calculate);
+  taxExemptCheckbox.addEventListener('change', applyTaxExemptState);
+
+  applyTaxExemptState();
+  computeChannelPrices();
+</script>
+
+</body>
+</html>
