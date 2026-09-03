@@ -105,9 +105,13 @@
     </div>
 
     <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; background:linear-gradient(135deg,#12324F,#0E1530); border:1.5px solid #4FC3F7; border-radius:14px; padding:14px 16px; margin-bottom:10px;">
-      <div style="font-size:16px; line-height:1.4; font-weight:700;">🚀 대표 판매가<br><small style="font-size:12px; color:#93A0C0; font-weight:400;">목표 마진율 적용 시</small></div>
+      <div style="font-size:16px; line-height:1.4; font-weight:700;">🚀 대표 판매가<br><small style="font-size:12px; color:#93A0C0; font-weight:400;">목표 마진율 또는 대표 판매가 직접 입력</small></div>
       <div style="display:flex; flex-direction:column; align-items:flex-end;">
-        <div id="out-b1" style="font-size:24px; font-weight:800; color:#7EE7FF; text-align:right; white-space:nowrap; font-family:'Consolas','Courier New',monospace; text-shadow:0 0 10px rgba(126,231,255,0.5);">-</div>
+        <div style="display:flex; align-items:baseline; gap:4px;">
+          <input type="text" inputmode="numeric" id="b1Input" placeholder="0" value=""
+            style="width:130px; text-align:right; border:none; background:transparent; outline:none; font-size:24px; font-weight:800; color:#7EE7FF; font-family:'Consolas','Courier New',monospace; text-shadow:0 0 10px rgba(126,231,255,0.5);">
+          <span style="font-size:16px; font-weight:700; color:#4FC3F7;">원</span>
+        </div>
         <div id="out-b1-actual-margin" style="font-size:13.2px; color:#93A0C0; font-weight:400; text-align:right; white-space:nowrap; margin-top:2px;">-</div>
       </div>
     </div>
@@ -222,7 +226,7 @@
   var taxExemptInnerDot = document.getElementById('taxExemptInnerDot');
   var costIncLabel = document.getElementById('costIncLabel');
 
-  var outB1 = document.getElementById('out-b1');
+  var priceInput = document.getElementById('b1Input');
   var outB1ActualMargin = document.getElementById('out-b1-actual-margin');
   var outC = document.getElementById('out-c');
   var outB2 = document.getElementById('out-b2');
@@ -302,55 +306,102 @@
     costExInput.value = Math.round(inc / (1 + VAT_RATE));
   }
 
-  // 계산 시 매입원가 기준값: 과세 제품은 부가세 포함가, 비과세 제품은 부가세 별도가를 사용
-  function calculate() {
-    var cost = taxExemptCheckbox.checked
+  var inputMode = 'margin'; // 'margin': 목표 마진율로 대표 판매가 계산 / 'price': 대표 판매가로 목표 마진율 역산
+
+  function getCost() {
+    return taxExemptCheckbox.checked
       ? parseNumber(costExInput.value)
       : parseNumber(costIncInput.value);
-    var marginA = parseNumber(marginAInput.value);
+  }
 
-    if (cost === null || cost <= 0 || marginA === null) {
-      outB1.textContent = '-';
-      outB1ActualMargin.textContent = '-';
+  // 소수점 셋째자리 이하 절삭, 둘째자리까지 표기
+  function truncate2(n) {
+    return Math.floor(n * 100 + 1e-9) / 100;
+  }
+
+  // 매입원가 기준 마진율(C), 스마트스토어·식봄 판매가(B2, B3)를 대표 판매가 기준으로 계산
+  function updateDependentResults(price, cost) {
+    if (price === null || cost === null || cost <= 0) {
       outC.textContent = '-';
       outB2.textContent = '-';
       outB3.textContent = '-';
-      lastB1Value = null;
       lastB2Value = null;
       lastB3Value = null;
       return;
     }
 
-    var b1 = priceFromMargin(cost, marginA);
+    var c = ((price - cost) / cost) * 100;
+    outC.textContent = formatPercentTruncate(c);
 
-    outB1.textContent = formatWonCeil(b1);
-
-    if (b1 !== null) {
-      lastB1Value = Math.ceil(b1 / 10) * 10;
-      var actualMargin = ((lastB1Value - cost) / lastB1Value) * 100;
-      outB1ActualMargin.textContent = '실제 마진율 ' + formatPercentRound(actualMargin);
-    } else {
-      lastB1Value = null;
-      outB1ActualMargin.textContent = '-';
-    }
-
-    // 스마트스토어·식봄 판매가는 "화면에 표시되는(십원단위 올림된) 대표 판매가"를 기준으로 계산해서
-    // 두번째 계산기(같은 대표 판매가 입력 시)와 항상 동일한 값이 나오도록 함
-    var b2 = (lastB1Value !== null) ? toChannelPrice(lastB1Value, SMART_STORE_FEE) : null;
-    var b3 = (lastB1Value !== null) ? toChannelPrice(lastB1Value, SIKBOM_FEE) : null;
-
-    if (b1 !== null) {
-      var c = ((b1 - cost) / cost) * 100;
-      outC.textContent = formatPercentTruncate(c);
-    } else {
-      outC.textContent = '-';
-    }
-
+    var b2 = toChannelPrice(price, SMART_STORE_FEE);
+    var b3 = toChannelPrice(price, SIKBOM_FEE);
     outB2.textContent = formatWonCeil(b2);
     outB3.textContent = formatWonCeil(b3);
+    lastB2Value = Math.ceil(b2 / 10) * 10;
+    lastB3Value = Math.ceil(b3 / 10) * 10;
+  }
 
-    lastB2Value = (b2 !== null) ? Math.ceil(b2 / 10) * 10 : null;
-    lastB3Value = (b3 !== null) ? Math.ceil(b3 / 10) * 10 : null;
+  // 목표 마진율 -> 대표 판매가 (기존 방식)
+  function computeFromMargin() {
+    var cost = getCost();
+    var marginA = parseNumber(marginAInput.value);
+
+    if (cost === null || cost <= 0 || marginA === null) {
+      priceInput.value = '';
+      outB1ActualMargin.textContent = '-';
+      lastB1Value = null;
+      updateDependentResults(null, cost);
+      return;
+    }
+
+    var b1raw = priceFromMargin(cost, marginA);
+
+    if (b1raw === null) {
+      priceInput.value = '';
+      outB1ActualMargin.textContent = '-';
+      lastB1Value = null;
+      updateDependentResults(null, cost);
+      return;
+    }
+
+    var rounded = Math.ceil(b1raw / 10) * 10;
+    priceInput.value = rounded;
+    lastB1Value = rounded;
+
+    var actualMargin = ((rounded - cost) / rounded) * 100;
+    outB1ActualMargin.textContent = '실제 마진율 ' + formatPercentRound(actualMargin);
+
+    updateDependentResults(rounded, cost);
+  }
+
+  // 대표 판매가 -> 목표 마진율 (역산)
+  function computeFromPrice() {
+    var cost = getCost();
+    var price = parseNumber(priceInput.value);
+
+    if (cost === null || cost <= 0 || price === null || price <= 0) {
+      marginAInput.value = '';
+      outB1ActualMargin.textContent = '-';
+      lastB1Value = null;
+      updateDependentResults(null, cost);
+      return;
+    }
+
+    var margin = ((price - cost) / price) * 100;
+    marginAInput.value = truncate2(margin).toFixed(2);
+    lastB1Value = price;
+
+    outB1ActualMargin.textContent = '실제 마진율 ' + formatPercentRound(margin);
+
+    updateDependentResults(price, cost);
+  }
+
+  function calculate() {
+    if (inputMode === 'price') {
+      computeFromPrice();
+    } else {
+      computeFromMargin();
+    }
   }
 
   function applyTaxExemptState() {
@@ -401,7 +452,8 @@
 
   costExInput.addEventListener('input', function () { syncFromEx(); calculate(); });
   costIncInput.addEventListener('input', function () { syncFromInc(); calculate(); });
-  marginAInput.addEventListener('input', calculate);
+  marginAInput.addEventListener('input', function () { inputMode = 'margin'; calculate(); });
+  priceInput.addEventListener('input', function () { inputMode = 'price'; calculate(); });
   taxExemptCheckbox.addEventListener('change', applyTaxExemptState);
 
   // 첫번째 계산기 초기화
@@ -410,6 +462,8 @@
     costExInput.value = '';
     costIncInput.value = '';
     marginAInput.value = '';
+    priceInput.value = '';
+    inputMode = 'margin';
     taxExemptCheckbox.checked = false;
     applyTaxExemptState();
   }
