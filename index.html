@@ -55,11 +55,23 @@
   </div>
 
   <!-- 카드 -->
-  <div style="background:#121A33; border-radius:22px; padding:26px 22px 24px; margin-top:16px; box-shadow:0 0 0 1px rgba(79,195,247,0.25), 0 0 30px rgba(79,195,247,0.12), 0 12px 24px rgba(0,0,0,0.45); border:1px solid #24345A;">
+  <div id="card1" style="background:#121A33; border-radius:22px; padding:26px 22px 24px; margin-top:16px; box-shadow:0 0 0 1px rgba(79,195,247,0.25), 0 0 30px rgba(79,195,247,0.12), 0 12px 24px rgba(0,0,0,0.45); border:1px solid #24345A;">
 
-    <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:18px;">
+    <div style="display:flex; align-items:center; justify-content:space-between; gap:8px; margin-bottom:14px;">
       <span style="font-size:18px; font-weight:800; color:#7EE7FF;">📋 매입원가 판매가 계산기</span>
-      <button type="button" id="resetBtn1" style="flex-shrink:0; background:transparent; border:1.5px solid #24345A; color:#93A0C0; font-size:13px; font-weight:700; border-radius:12px; padding:6px 12px; cursor:pointer; white-space:nowrap;">↺ 초기화</button>
+      <div data-nocapture="1" style="display:flex; gap:6px; flex-shrink:0;">
+        <button type="button" id="captureBtn1" style="background:#12324F; border:1.5px solid #4FC3F7; color:#7EE7FF; font-size:13px; font-weight:700; border-radius:12px; padding:6px 12px; cursor:pointer; white-space:nowrap;">📸 캡쳐</button>
+        <button type="button" id="resetBtn1" style="background:transparent; border:1.5px solid #24345A; color:#93A0C0; font-size:13px; font-weight:700; border-radius:12px; padding:6px 12px; cursor:pointer; white-space:nowrap;">↺ 초기화</button>
+      </div>
+    </div>
+
+    <!-- 상품명 -->
+    <div style="margin-bottom:18px;">
+      <label for="productName1" style="display:flex; align-items:center; gap:6px; font-size:16px; font-weight:700; color:#E6EDF7; margin-bottom:8px;">🏷️ 상품명</label>
+      <div style="display:flex; align-items:center; background:#0E1530; border:1.5px solid #24345A; border-radius:14px; padding:12px 16px;">
+        <input type="text" id="productName1" placeholder="계산할 상품명을 입력하세요" value=""
+          style="flex:1; border:none; background:transparent; outline:none; font-size:18px; font-weight:700; color:#E6EDF7; min-width:0;">
+      </div>
     </div>
 
     <!-- 비과세 체크 -->
@@ -138,13 +150,25 @@
   </div>
 
   <!-- 두번째 카드: 판매채널 가격 계산기 -->
-  <div style="background:#121A33; border-radius:22px; padding:26px 22px 24px; margin-top:20px; box-shadow:0 0 0 1px rgba(79,195,247,0.25), 0 0 30px rgba(79,195,247,0.12), 0 12px 24px rgba(0,0,0,0.45); border:1px solid #24345A;">
+  <div id="card2" style="background:#121A33; border-radius:22px; padding:26px 22px 24px; margin-top:20px; box-shadow:0 0 0 1px rgba(79,195,247,0.25), 0 0 30px rgba(79,195,247,0.12), 0 12px 24px rgba(0,0,0,0.45); border:1px solid #24345A;">
 
-    <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:6px;">
+    <div style="display:flex; align-items:center; justify-content:space-between; gap:8px; margin-bottom:6px;">
       <span style="font-size:18px; font-weight:800; color:#7EE7FF;">🛒 판매채널 가격 계산기</span>
-      <button type="button" id="resetBtn2" style="flex-shrink:0; background:transparent; border:1.5px solid #24345A; color:#93A0C0; font-size:13px; font-weight:700; border-radius:12px; padding:6px 12px; cursor:pointer; white-space:nowrap;">↺ 초기화</button>
+      <div data-nocapture="1" style="display:flex; gap:6px; flex-shrink:0;">
+        <button type="button" id="captureBtn2" style="background:#12324F; border:1.5px solid #4FC3F7; color:#7EE7FF; font-size:13px; font-weight:700; border-radius:12px; padding:6px 12px; cursor:pointer; white-space:nowrap;">📸 캡쳐</button>
+        <button type="button" id="resetBtn2" style="background:transparent; border:1.5px solid #24345A; color:#93A0C0; font-size:13px; font-weight:700; border-radius:12px; padding:6px 12px; cursor:pointer; white-space:nowrap;">↺ 초기화</button>
+      </div>
     </div>
-    <p style="margin:0 0 18px; font-size:14px; color:#93A0C0;">대표 판매가만 있으면 채널별 판매가를 바로 계산해요</p>
+    <p style="margin:0 0 14px; font-size:14px; color:#93A0C0;">대표 판매가만 있으면 채널별 판매가를 바로 계산해요</p>
+
+    <!-- 상품명 -->
+    <div style="margin-bottom:18px;">
+      <label for="productName2" style="display:flex; align-items:center; gap:6px; font-size:16px; font-weight:700; color:#E6EDF7; margin-bottom:8px;">🏷️ 상품명</label>
+      <div style="display:flex; align-items:center; background:#0E1530; border:1.5px solid #24345A; border-radius:14px; padding:12px 16px;">
+        <input type="text" id="productName2" placeholder="계산할 상품명을 입력하세요" value=""
+          style="flex:1; border:none; background:transparent; outline:none; font-size:18px; font-weight:700; color:#E6EDF7; min-width:0;">
+      </div>
+    </div>
 
     <div style="margin-bottom:0;">
       <label for="basePriceInput" style="display:flex; align-items:center; gap:6px; font-size:16px; font-weight:700; color:#E6EDF7; margin-bottom:8px;">💰 대표 판매가 <span style="font-size:13px; color:#93A0C0; font-weight:400;">직접 입력 또는 가져오기</span></label>
@@ -230,6 +254,7 @@
 </div>
 
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script>
   var costExInput = document.getElementById('costEx');
   var costIncInput = document.getElementById('costInc');
@@ -482,9 +507,59 @@
   priceInput.addEventListener('input', function () { inputMode = 'price'; calculate(); });
   taxExemptCheckbox.addEventListener('change', applyTaxExemptState);
 
+  // 계산기 영역 캡쳐: 해당 카드를 PNG 이미지로 저장 (버튼 영역은 이미지에서 제외)
+  function captureCard(cardId, nameInputId, defaultName, btn) {
+    if (typeof html2canvas === 'undefined') {
+      alert('캡쳐 기능을 불러오지 못했어요. 인터넷 연결을 확인한 뒤 새로고침 해주세요.');
+      return;
+    }
+    var card = document.getElementById(cardId);
+    var nameVal = document.getElementById(nameInputId).value.trim();
+    var originalLabel = btn.textContent;
+    btn.textContent = '캡쳐 중...';
+    btn.disabled = true;
+
+    html2canvas(card, {
+      backgroundColor: '#0A0E27',
+      scale: 2,
+      useCORS: true,
+      ignoreElements: function (el) {
+        return el.getAttribute && el.getAttribute('data-nocapture') === '1';
+      }
+    }).then(function (canvas) {
+      var d = new Date();
+      var pad = function (n) { return (n < 10 ? '0' : '') + n; };
+      var stamp = d.getFullYear() + pad(d.getMonth() + 1) + pad(d.getDate()) + '_' + pad(d.getHours()) + pad(d.getMinutes());
+      var safeName = (nameVal || defaultName).replace(/[\\/:*?"<>|]/g, '_');
+      var link = document.createElement('a');
+      link.download = safeName + '_' + stamp + '.png';
+      link.href = canvas.toDataURL('image/png');
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }).catch(function () {
+      alert('캡쳐 중 문제가 생겼어요. 다시 시도해주세요.');
+    }).then(function () {
+      btn.textContent = originalLabel;
+      btn.disabled = false;
+    });
+  }
+
+  var captureBtn1 = document.getElementById('captureBtn1');
+  var captureBtn2 = document.getElementById('captureBtn2');
+  captureBtn1.addEventListener('click', function () {
+    captureCard('card1', 'productName1', '매입원가_판매가_계산기', captureBtn1);
+  });
+  captureBtn2.addEventListener('click', function () {
+    captureCard('card2', 'productName2', '판매채널_가격_계산기', captureBtn2);
+  });
+
   // 첫번째 계산기 초기화
   var resetBtn1 = document.getElementById('resetBtn1');
+  var productName1 = document.getElementById('productName1');
+  var productName2 = document.getElementById('productName2');
   function resetCalculator1() {
+    productName1.value = '';
     costExInput.value = '';
     costIncInput.value = '';
     marginAInput.value = '';
@@ -498,6 +573,7 @@
   // 두번째 계산기 초기화
   var resetBtn2 = document.getElementById('resetBtn2');
   function resetCalculator2() {
+    productName2.value = '';
     basePriceInput.value = '';
     computeChannelPrices();
   }
