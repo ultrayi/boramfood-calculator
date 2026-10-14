@@ -507,7 +507,21 @@
   priceInput.addEventListener('input', function () { inputMode = 'price'; calculate(); });
   taxExemptCheckbox.addEventListener('change', applyTaxExemptState);
 
-  // 계산기 영역 캡쳐: 해당 카드를 PNG 이미지로 저장 (버튼 영역은 이미지에서 제외)
+  // 계산기 영역 캡쳐: 해당 카드를 이미지로 만들어 클립보드에 복사 (파일 저장 없음, 버튼 영역은 제외)
+  // 클립보드 복사가 막힌 환경에서는 PNG 파일 다운로드로 대체
+  function downloadCanvas(canvas, nameVal, defaultName) {
+    var d = new Date();
+    var pad = function (n) { return (n < 10 ? '0' : '') + n; };
+    var stamp = d.getFullYear() + pad(d.getMonth() + 1) + pad(d.getDate()) + '_' + pad(d.getHours()) + pad(d.getMinutes());
+    var safeName = (nameVal || defaultName).replace(/[\\/:*?"<>|]/g, '_');
+    var link = document.createElement('a');
+    link.download = safeName + '_' + stamp + '.png';
+    link.href = canvas.toDataURL('image/png');
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+
   function captureCard(cardId, nameInputId, defaultName, btn) {
     if (typeof html2canvas === 'undefined') {
       alert('캡쳐 기능을 불러오지 못했어요. 인터넷 연결을 확인한 뒤 새로고침 해주세요.');
@@ -519,30 +533,58 @@
     btn.textContent = '캡쳐 중...';
     btn.disabled = true;
 
-    html2canvas(card, {
+    function finish(label) {
+      btn.textContent = label;
+      setTimeout(function () {
+        btn.textContent = originalLabel;
+        btn.disabled = false;
+      }, 1500);
+    }
+
+    var canvasPromise = html2canvas(card, {
       backgroundColor: '#0A0E27',
       scale: 2,
       useCORS: true,
       ignoreElements: function (el) {
         return el.getAttribute && el.getAttribute('data-nocapture') === '1';
       }
-    }).then(function (canvas) {
-      var d = new Date();
-      var pad = function (n) { return (n < 10 ? '0' : '') + n; };
-      var stamp = d.getFullYear() + pad(d.getMonth() + 1) + pad(d.getDate()) + '_' + pad(d.getHours()) + pad(d.getMinutes());
-      var safeName = (nameVal || defaultName).replace(/[\\/:*?"<>|]/g, '_');
-      var link = document.createElement('a');
-      link.download = safeName + '_' + stamp + '.png';
-      link.href = canvas.toDataURL('image/png');
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    }).catch(function () {
-      alert('캡쳐 중 문제가 생겼어요. 다시 시도해주세요.');
-    }).then(function () {
-      btn.textContent = originalLabel;
-      btn.disabled = false;
     });
+
+    var canClipboard = !!(navigator.clipboard && navigator.clipboard.write && window.ClipboardItem);
+
+    if (canClipboard) {
+      // 클릭 직후 바로 클립보드 쓰기를 요청하고, 이미지 데이터는 완성되는 대로 채워 넣음
+      var blobPromise = canvasPromise.then(function (canvas) {
+        return new Promise(function (resolve, reject) {
+          canvas.toBlob(function (blob) {
+            if (blob) { resolve(blob); } else { reject(new Error('blob')); }
+          }, 'image/png');
+        });
+      });
+
+      navigator.clipboard.write([new ClipboardItem({ 'image/png': blobPromise })])
+        .then(function () {
+          finish('✅ 복사됨');
+        })
+        .catch(function () {
+          // 복사가 거부되면 파일 다운로드로 대체
+          canvasPromise.then(function (canvas) {
+            downloadCanvas(canvas, nameVal, defaultName);
+            finish('💾 파일로 저장됨');
+          }).catch(function () {
+            alert('캡쳐 중 문제가 생겼어요. 다시 시도해주세요.');
+            finish(originalLabel);
+          });
+        });
+    } else {
+      canvasPromise.then(function (canvas) {
+        downloadCanvas(canvas, nameVal, defaultName);
+        finish('💾 파일로 저장됨');
+      }).catch(function () {
+        alert('캡쳐 중 문제가 생겼어요. 다시 시도해주세요.');
+        finish(originalLabel);
+      });
+    }
   }
 
   var captureBtn1 = document.getElementById('captureBtn1');
