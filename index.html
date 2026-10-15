@@ -134,7 +134,12 @@
     </div>
 
     <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; background:#0E1530; border:1.5px solid #24345A; border-radius:14px; padding:14px 16px; margin-bottom:10px;">
-      <div style="font-size:16px; line-height:1.4; font-weight:700;">🛰️ 스마트스토어 판매가<br><small style="font-size:12px; color:#93A0C0; font-weight:400;">수수료 6.13% 반영, 판매차익 동일화</small></div>
+      <div style="font-size:16px; line-height:1.4; font-weight:700;">🛰️ 스마트스토어 판매가<br><small id="smartNote1" style="font-size:12px; color:#93A0C0; font-weight:400;">수수료 6.13% 반영, 판매차익 동일화</small>
+        <label for="sameSmart1" style="display:flex; align-items:center; gap:8px; margin-top:6px; cursor:pointer; font-size:13px; font-weight:600; color:#E6EDF7;">
+          <input type="checkbox" id="sameSmart1" style="display:none;">
+          <span style="position:relative; width:15px; height:15px; border-radius:50%; background:#FFFFFF; flex:none; display:inline-block;"><span id="sameSmartDot1" style="position:absolute; top:50%; left:50%; width:9px; height:9px; border-radius:50%; background:#F5A623; transform:translate(-50%,-50%) scale(0); transition:transform 0.15s ease;"></span></span>
+          대표 판매가와 동일가
+        </label></div>
       <div id="out-b2" style="font-size:20px; font-weight:800; color:#E6EDF7; text-align:right; white-space:nowrap; font-family:'Consolas','Courier New',monospace;">-</div>
     </div>
 
@@ -189,7 +194,12 @@
     </div>
 
     <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; background:#0E1530; border:1.5px solid #24345A; border-radius:14px; padding:14px 16px; margin-bottom:10px;">
-      <div style="font-size:16px; line-height:1.4; font-weight:700;">🛰️ 스마트스토어 판매가<br><small style="font-size:12px; color:#93A0C0; font-weight:400;">수수료 6.13% 반영, 판매차익 동일화</small></div>
+      <div style="font-size:16px; line-height:1.4; font-weight:700;">🛰️ 스마트스토어 판매가<br><small id="smartNote2" style="font-size:12px; color:#93A0C0; font-weight:400;">수수료 6.13% 반영, 판매차익 동일화</small>
+        <label for="sameSmart2" style="display:flex; align-items:center; gap:8px; margin-top:6px; cursor:pointer; font-size:13px; font-weight:600; color:#E6EDF7;">
+          <input type="checkbox" id="sameSmart2" style="display:none;">
+          <span style="position:relative; width:15px; height:15px; border-radius:50%; background:#FFFFFF; flex:none; display:inline-block;"><span id="sameSmartDot2" style="position:absolute; top:50%; left:50%; width:9px; height:9px; border-radius:50%; background:#F5A623; transform:translate(-50%,-50%) scale(0); transition:transform 0.15s ease;"></span></span>
+          대표 판매가와 동일가
+        </label></div>
       <div id="out-b2-channel" style="font-size:20px; font-weight:800; color:#E6EDF7; text-align:right; white-space:nowrap; font-family:'Consolas','Courier New',monospace;">-</div>
     </div>
 
@@ -277,6 +287,14 @@
   var outB3Channel = document.getElementById('out-b3-channel');
   var lastB1Value = null;
   var lastB2Value = null;
+  var sameSmart1 = document.getElementById('sameSmart1');
+  var sameSmart2 = document.getElementById('sameSmart2');
+  function refreshSameSmartUI() {
+    [[sameSmart1,'1'],[sameSmart2,'2']].forEach(function (a) {
+      document.getElementById('sameSmartDot' + a[1]).style.transform = 'translate(-50%,-50%) scale(' + (a[0].checked ? 1 : 0) + ')';
+      document.getElementById('smartNote' + a[1]).textContent = a[0].checked ? '대표 판매가와 동일 (수수료 미반영)' : '수수료 6.13% 반영, 판매차익 동일화';
+    });
+  }
   var lastSikbom2pValue = null;
   var lastB3Value = null;
 
@@ -376,7 +394,7 @@
     var c = ((price - cost) / cost) * 100;
     outC.textContent = formatPercentTruncate(c);
 
-    var b2 = toChannelPrice(price, SMART_STORE_FEE);
+    var b2 = sameSmart1.checked ? price : toChannelPrice(price, SMART_STORE_FEE);
     var sikbom2p = toChannelPrice(price, SIKBOM_2P_FEE);
     var b3 = toChannelPrice(price, SIKBOM_3P_FEE);
 
@@ -483,7 +501,7 @@
       return;
     }
 
-    var smart = toChannelPrice(p, SMART_STORE_FEE);
+    var smart = sameSmart2.checked ? p : toChannelPrice(p, SMART_STORE_FEE);
     var sikbom2p = toChannelPrice(p, SIKBOM_2P_FEE);
     var sikbom3p = toChannelPrice(p, SIKBOM_3P_FEE);
 
@@ -506,6 +524,8 @@
   marginAInput.addEventListener('input', function () { inputMode = 'margin'; calculate(); });
   priceInput.addEventListener('input', function () { inputMode = 'price'; calculate(); });
   taxExemptCheckbox.addEventListener('change', applyTaxExemptState);
+  sameSmart1.addEventListener('change', function () { refreshSameSmartUI(); calculate(); });
+  sameSmart2.addEventListener('change', function () { refreshSameSmartUI(); computeChannelPrices(); });
 
   // 계산기 영역 캡쳐: 해당 카드를 이미지로 만들어 클립보드에 복사 (파일 저장 없음, 버튼 영역은 제외)
   // 클립보드 복사가 막힌 환경에서는 PNG 파일 다운로드로 대체
@@ -608,6 +628,8 @@
     priceInput.value = '';
     inputMode = 'margin';
     taxExemptCheckbox.checked = false;
+    sameSmart1.checked = false;
+    refreshSameSmartUI();
     applyTaxExemptState();
   }
   resetBtn1.addEventListener('click', resetCalculator1);
@@ -617,6 +639,8 @@
   function resetCalculator2() {
     productName2.value = '';
     basePriceInput.value = '';
+    sameSmart2.checked = false;
+    refreshSameSmartUI();
     computeChannelPrices();
   }
   resetBtn2.addEventListener('click', resetCalculator2);
